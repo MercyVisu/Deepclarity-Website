@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap');
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply font-sans text-primary-900 antialiased;
+    background-color: #faf8f2;
+  }
+}
+
+@layer components {
+  .section-padding {
+    @apply py-16 md:py-24 lg:py-32;
+  }
+  .container-width {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  .section-heading {
+    @apply text-3xl md:text-4xl lg:text-5xl font-display font-bold text-primary-900;
+  }
+  .section-subheading {
+    @apply text-lg md:text-xl text-gray-600 max-w-2xl;
+  }
+  .eyebrow-label {
+    @apply inline-flex items-center gap-2 text-sm font-semibold tracking-wide text-primary-500 uppercase;
+  }
+  .eyebrow-label::before {
+    content: "";
+    @apply w-6 h-[2px] bg-gold-500 inline-block;
+  }
+}
