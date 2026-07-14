@@ -1,4 +1,3 @@
-// cache-bust: 1784008568
 "use client";
 
 import { motion } from "framer-motion";
@@ -115,7 +114,11 @@ export default function AboutPage() {
               className="bg-cream-100 rounded-2xl p-8 md:p-12 border border-primary-100"
             >
               <div className="text-center">
-                <img src="/founder.jpg" alt="V. Swaminathan" className="w-32 h-32 rounded-full mx-auto mb-4 object-cover shadow-lg border-4 border-primary-200" />
+                <div className="w-24 h-24 bg-primary-500 rounded-full mx-auto mb-4 flex items-center justify-center">
+                  <span className="text-3xl font-display font-bold text-white">
+                    VS
+                  </span>
+                </div>
                 <h3 className="text-xl font-display font-bold text-primary-900">
                   V. Swaminathan
                 </h3>
