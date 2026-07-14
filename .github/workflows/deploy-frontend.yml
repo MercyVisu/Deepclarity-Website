@@ -27,13 +27,17 @@ jobs:
           service_account: ${{ env.SERVICE_ACCOUNT }}
       - uses: google-github-actions/setup-gcloud@v2
       - run: gcloud auth configure-docker ${{ env.ARTIFACT_REGISTRY }} --quiet
-      - run: |
+      - name: Build Docker image
+        run: |
           docker build \
+            -f frontend/Dockerfile \
             -t ${{ env.ARTIFACT_REGISTRY }}/${{ env.IMAGE_REPO }}/${{ env.SERVICE_NAME }}:${{ github.sha }} \
             ./frontend
-      - run: |
+      - name: Push Docker image
+        run: |
           docker push ${{ env.ARTIFACT_REGISTRY }}/${{ env.IMAGE_REPO }}/${{ env.SERVICE_NAME }}:${{ github.sha }}
-      - run: |
+      - name: Deploy to Cloud Run
+        run: |
           gcloud run deploy ${{ env.SERVICE_NAME }} \
             --image=${{ env.ARTIFACT_REGISTRY }}/${{ env.IMAGE_REPO }}/${{ env.SERVICE_NAME }}:${{ github.sha }} \
             --region=${{ env.REGION }} \
