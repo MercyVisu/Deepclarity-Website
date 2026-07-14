@@ -30,7 +30,7 @@ jobs:
       - name: Build Docker image
         run: |
           docker build \
-            -f frontend/Dockerfile \
+            
             -t ${{ env.ARTIFACT_REGISTRY }}/${{ env.IMAGE_REPO }}/${{ env.SERVICE_NAME }}:${{ github.sha }} \
             ./frontend
       - name: Push Docker image
