@@ -60,7 +60,7 @@ export function HeroSection() {
                 size="sm"
                 className="px-6 py-2.5 text-sm font-semibold rounded-md"
               >
-                Book a Free 20-Min Call
+                Book a Free 30-Min Call
               </Button>
             </Link>
             <Link href="/free-consultation">
