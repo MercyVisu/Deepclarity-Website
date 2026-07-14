@@ -34,7 +34,7 @@ jobs:
       - uses: google-github-actions/setup-gcloud@v2
       - run: gcloud auth configure-docker ${{ env.ARTIFACT_REGISTRY }} --quiet
       - name: Build Docker image
-        run: docker build --build-arg NEXT_PUBLIC_API_URL=https://deepclariti-api-cnh4u4gu6q-el.a.run.app/api -t ${{ env.ARTIFACT_REGISTRY }}/${{ env.IMAGE_REPO }}/${{ env.SERVICE_NAME }}:${{ github.sha }} ./frontend
+        run: docker build --build-arg NEXT_PUBLIC_API_URL=https://deepclariti-api-745036261829.asia-south1.run.app/api -t ${{ env.ARTIFACT_REGISTRY }}/${{ env.IMAGE_REPO }}/${{ env.SERVICE_NAME }}:${{ github.sha }} ./frontend
       - name: Push Docker image
         run: docker push ${{ env.ARTIFACT_REGISTRY }}/${{ env.IMAGE_REPO }}/${{ env.SERVICE_NAME }}:${{ github.sha }}
       - name: Deploy to Cloud Run
