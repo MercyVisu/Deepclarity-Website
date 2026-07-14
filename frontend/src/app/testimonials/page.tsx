@@ -18,8 +18,8 @@ const testimonials = [
 ];
  
 const videoTestimonials = [
-  {  role: "College Studentt", src: "/vedios/testimonial-1.mp4" },
-  {  role: "Parent", src: "/vedios/testimonial-2.mp4" },
+  { name: "Student", role: "College Student", src: "/vedios/testimonial-1.mp4" },
+  { name: "Parent", role: "Parent", src: "/vedios/testimonial-2.mp4" },
 ];
  
 function VideoCard({ name, role, src }: { name: string; role: string; src: string }) {
