@@ -53,7 +53,7 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3"
+            className="mt-8 flex items-center justify-center"
           >
             <Link href="/book-session">
               <Button
@@ -61,15 +61,6 @@ export function HeroSection() {
                 className="px-6 py-2.5 text-sm font-semibold rounded-md"
               >
                 Book a Free 30-Min Call
-              </Button>
-            </Link>
-            <Link href="/free-consultation">
-              <Button
-                variant="outline"
-                size="sm"
-                className="px-6 py-2.5 text-sm font-semibold rounded-md"
-              >
-                Free Consultation
               </Button>
             </Link>
           </motion.div>
