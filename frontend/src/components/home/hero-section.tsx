@@ -55,7 +55,7 @@ export function HeroSection() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="mt-8 flex items-center justify-center"
           >
-            <Link href="/book-session">
+            <Link href="/free-consultation">
               <Button
                 size="sm"
                 className="px-6 py-2.5 text-sm font-semibold rounded-md"
