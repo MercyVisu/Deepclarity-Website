@@ -51,6 +51,7 @@ export async function bookSession(data: {
   phone: string;
   email: string;
   user_type: string;
+  interest_level?: string;
   preferred_date: string;
   preferred_time: string;
   message?: string;
@@ -66,6 +67,7 @@ export async function submitConsultation(data: {
   phone: string;
   email: string;
   user_type: string;
+  interest_level?: string;
   current_class?: string;
   query?: string;
 }) {
