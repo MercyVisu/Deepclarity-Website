@@ -1,0 +1,74 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { getAdminContacts } from "@/lib/api";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
+
+export default function AdminContactsPage() {
+  const router = useRouter();
+  const [contacts, setContacts] = useState<Array<Record<string, unknown>>>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const token = localStorage.getItem("admin_token");
+    if (!token) { router.push("/admin/login"); return; }
+
+    getAdminContacts().then(({ data, error }) => {
+      if (error) { router.push("/admin/login"); return; }
+      setContacts((data as Array<Record<string, unknown>>) || []);
+      setLoading(false);
+    });
+  }, [router]);
+
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><p>Loading...</p></div>;
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <div className="container-width py-8">
+        <div className="flex items-center space-x-4 mb-6">
+          <Link href="/admin/dashboard" className="text-gray-500 hover:text-primary-500"><ArrowLeft size={20} /></Link>
+          <h1 className="text-2xl font-display font-bold text-primary-900">Contact Messages</h1>
+        </div>
+
+        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="bg-gray-50 border-b border-gray-200">
+                <tr>
+                  <th className="text-left px-4 py-3 font-medium text-gray-700">Name</th>
+                  <th className="text-left px-4 py-3 font-medium text-gray-700">Email</th>
+                  <th className="text-left px-4 py-3 font-medium text-gray-700">Phone</th>
+                  <th className="text-left px-4 py-3 font-medium text-gray-700">Type</th>
+                  <th className="text-left px-4 py-3 font-medium text-gray-700">Message</th>
+                  <th className="text-left px-4 py-3 font-medium text-gray-700">Status</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                {contacts.length === 0 ? (
+                  <tr><td colSpan={6} className="px-4 py-8 text-center text-gray-500">No messages yet</td></tr>
+                ) : (
+                  contacts.map((contact) => (
+                    <tr key={contact.id as number} className="hover:bg-gray-50">
+                      <td className="px-4 py-3 font-medium">{contact.name as string}</td>
+                      <td className="px-4 py-3 text-gray-600">{contact.email as string}</td>
+                      <td className="px-4 py-3 text-gray-600">{contact.phone as string}</td>
+                      <td className="px-4 py-3 capitalize">{contact.user_type as string}</td>
+                      <td className="px-4 py-3 text-gray-600 max-w-xs truncate">{contact.message as string}</td>
+                      <td className="px-4 py-3">
+                        <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${contact.is_read ? "bg-green-100 text-green-800" : "bg-blue-100 text-blue-800"}`}>
+                          {contact.is_read ? "Read" : "New"}
+                        </span>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
