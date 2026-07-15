@@ -20,6 +20,7 @@ def book_session(data: AppointmentCreate, db: Session = Depends(get_db)):
         phone=data.phone,
         email=data.email,
         user_type=data.user_type,
+        interest_level=data.interest_level,
         preferred_date=data.preferred_date,
         preferred_time=data.preferred_time,
         message=data.message,

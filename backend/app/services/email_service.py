@@ -55,13 +55,27 @@ def send_email(subject: str, html_body: str) -> bool:
         return False
 
 
+INTEREST_LEVEL_LABELS = {
+    "exploring": "Just exploring options",
+    "one_time": "Want a one-time consultation",
+    "immediate": "Ready to join immediately",
+}
+
+
+def _get_interest_label(value: str | None) -> str:
+    if not value:
+        return "Not specified"
+    return INTEREST_LEVEL_LABELS.get(value, value)
+
+
 def send_booking_notification(
     name: str,
     phone: str,
     email: str,
     user_type: str,
-    preferred_date: str,
-    preferred_time: str,
+    interest_level: str | None = None,
+    preferred_date: str = "",
+    preferred_time: str = "",
     message: str | None = None,
 ):
     """Send notification when someone books a career coaching session."""
@@ -78,6 +92,7 @@ def send_booking_notification(
                 <tr><td style="padding: 8px 0; font-weight: bold; color: #374151;">Phone:</td><td style="padding: 8px 0; color: #1f2937;">{phone}</td></tr>
                 <tr><td style="padding: 8px 0; font-weight: bold; color: #374151;">Email:</td><td style="padding: 8px 0; color: #1f2937;"><a href="mailto:{email}">{email}</a></td></tr>
                 <tr><td style="padding: 8px 0; font-weight: bold; color: #374151;">Type:</td><td style="padding: 8px 0; color: #1f2937; text-transform: capitalize;">{user_type}</td></tr>
+                <tr><td style="padding: 8px 0; font-weight: bold; color: #374151;">Interest Level:</td><td style="padding: 8px 0; color: #1f2937;">{_get_interest_label(interest_level)}</td></tr>
                 <tr><td style="padding: 8px 0; font-weight: bold; color: #374151;">Preferred Date:</td><td style="padding: 8px 0; color: #1f2937;">{preferred_date}</td></tr>
                 <tr><td style="padding: 8px 0; font-weight: bold; color: #374151;">Preferred Time:</td><td style="padding: 8px 0; color: #1f2937;">{preferred_time}</td></tr>
                 <tr><td style="padding: 8px 0; font-weight: bold; color: #374151;">Message:</td><td style="padding: 8px 0; color: #1f2937;">{message or 'No message'}</td></tr>
@@ -129,6 +144,7 @@ def send_consultation_notification(
     phone: str,
     email: str,
     user_type: str,
+    interest_level: str | None = None,
     current_class: str | None = None,
     query: str | None = None,
 ):
@@ -146,6 +162,7 @@ def send_consultation_notification(
                 <tr><td style="padding: 8px 0; font-weight: bold; color: #374151;">Phone:</td><td style="padding: 8px 0; color: #1f2937;">{phone}</td></tr>
                 <tr><td style="padding: 8px 0; font-weight: bold; color: #374151;">Email:</td><td style="padding: 8px 0; color: #1f2937;"><a href="mailto:{email}">{email}</a></td></tr>
                 <tr><td style="padding: 8px 0; font-weight: bold; color: #374151;">Type:</td><td style="padding: 8px 0; color: #1f2937; text-transform: capitalize;">{user_type}</td></tr>
+                <tr><td style="padding: 8px 0; font-weight: bold; color: #374151;">Interest Level:</td><td style="padding: 8px 0; color: #1f2937;">{_get_interest_label(interest_level)}</td></tr>
                 <tr><td style="padding: 8px 0; font-weight: bold; color: #374151;">Current Class:</td><td style="padding: 8px 0; color: #1f2937;">{current_class or 'Not specified'}</td></tr>
                 <tr><td style="padding: 8px 0; font-weight: bold; color: #374151;">Query:</td><td style="padding: 8px 0; color: #1f2937;">{query or 'No query specified'}</td></tr>
             </table>

@@ -23,6 +23,7 @@ class Appointment(Base):
     phone = Column(String(20), nullable=False)
     email = Column(String(255), nullable=False)
     user_type = Column(String(50), nullable=False)  # student / parent
+    interest_level = Column(String(100), nullable=True)
     preferred_date = Column(String(50), nullable=False)
     preferred_time = Column(String(50), nullable=False)
     message = Column(Text, nullable=True)
@@ -51,6 +52,7 @@ class Lead(Base):
     phone = Column(String(20), nullable=False)
     email = Column(String(255), nullable=False)
     user_type = Column(String(50), nullable=False)
+    interest_level = Column(String(100), nullable=True)
     current_class = Column(String(100), nullable=True)
     query = Column(Text, nullable=True)
     source = Column(String(100), default="free-consultation")

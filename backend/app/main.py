@@ -38,6 +38,18 @@ app.include_router(admin.router)
 @app.on_event("startup")
 def on_startup():
     Base.metadata.create_all(bind=engine)
+    # Add interest_level column to existing tables if missing
+    from sqlalchemy import inspect, text
+    inspector = inspect(engine)
+    with engine.begin() as conn:
+        if "appointments" in inspector.get_table_names():
+            columns = [c["name"] for c in inspector.get_columns("appointments")]
+            if "interest_level" not in columns:
+                conn.execute(text("ALTER TABLE appointments ADD COLUMN interest_level VARCHAR(100)"))
+        if "leads" in inspector.get_table_names():
+            columns = [c["name"] for c in inspector.get_columns("leads")]
+            if "interest_level" not in columns:
+                conn.execute(text("ALTER TABLE leads ADD COLUMN interest_level VARCHAR(100)"))
     # Create default admin if not exists
     from app.database import SessionLocal
     db = SessionLocal()

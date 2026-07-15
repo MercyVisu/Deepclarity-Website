@@ -20,6 +20,7 @@ def submit_consultation(data: ConsultationCreate, db: Session = Depends(get_db))
         phone=data.phone,
         email=data.email,
         user_type=data.user_type,
+        interest_level=data.interest_level,
         current_class=data.current_class,
         query=data.query,
     )

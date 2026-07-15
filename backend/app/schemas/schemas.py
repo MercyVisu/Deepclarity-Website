@@ -34,6 +34,7 @@ class AppointmentCreate(BaseModel):
     phone: str = Field(..., min_length=7, max_length=20)
     email: EmailStr
     user_type: str = Field(..., pattern="^(student|parent)$")
+    interest_level: Optional[str] = None
     preferred_date: str = Field(..., min_length=1)
     preferred_time: str = Field(..., min_length=1)
     message: Optional[str] = None
@@ -62,6 +63,7 @@ class ConsultationCreate(BaseModel):
     phone: str = Field(..., min_length=7, max_length=20)
     email: EmailStr
     user_type: str = Field(..., pattern="^(student|parent)$")
+    interest_level: Optional[str] = None
     current_class: Optional[str] = None
     query: Optional[str] = None
 
