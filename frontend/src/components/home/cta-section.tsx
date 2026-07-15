@@ -36,14 +36,6 @@ export function CTASection() {
                 <ArrowRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
-            <Link href="/free-consultation">
-              <Button
-                size="xl"
-                className="bg-white/10 text-white border-2 border-white/30 hover:bg-white/20"
-              >
-                Start with FREE Consultation
-              </Button>
-            </Link>
           </div>
         </motion.div>
       </div>

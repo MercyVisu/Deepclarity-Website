@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { submitConsultation } from "@/lib/api";
-import { Phone, CheckCircle2, Clock, Shield, Users, Sparkles, ShieldCheck } from "lucide-react";
+import { Phone, CheckCircle2, Clock, Shield, Users, Sparkles } from "lucide-react";
 
 const interestOptions = [
   { value: "exploring", label: "Just exploring options" },
@@ -27,49 +27,8 @@ export default function FreeConsultationPage() {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
 
-  // OTP verification state (UI only — backend team wires actual send/verify)
-  const [otp, setOtp] = useState("");
-  const [otpSent, setOtpSent] = useState(false);
-  const [otpVerified, setOtpVerified] = useState(false);
-  const [otpStatus, setOtpStatus] = useState<"idle" | "sending" | "verifying">("idle");
-  const [otpError, setOtpError] = useState("");
-
-  const handleSendOtp = async () => {
-    if (!formData.phone || formData.phone.length < 10) {
-      setOtpError("Enter a valid phone number first");
-      return;
-    }
-    setOtpStatus("sending");
-    setOtpError("");
-    // TODO (backend team): call OTP send API here
-    setTimeout(() => {
-      setOtpSent(true);
-      setOtpStatus("idle");
-    }, 800);
-  };
-
-  const handleVerifyOtp = async () => {
-    if (!otp || otp.length < 4) {
-      setOtpError("Enter the OTP you received");
-      return;
-    }
-    setOtpStatus("verifying");
-    setOtpError("");
-    // TODO (backend team): call OTP verify API here
-    setTimeout(() => {
-      setOtpVerified(true);
-      setOtpStatus("idle");
-    }, 800);
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (!otpVerified) {
-      setErrorMsg("Please verify your phone number before submitting.");
-      setStatus("error");
-      return;
-    }
 
     setStatus("loading");
     setErrorMsg("");
@@ -89,9 +48,6 @@ export default function FreeConsultationPage() {
         interest_level: "",
         query: "",
       });
-      setOtp("");
-      setOtpSent(false);
-      setOtpVerified(false);
     }
   };
 
@@ -208,72 +164,18 @@ export default function FreeConsultationPage() {
                     placeholder="Your full name"
                   />
                 </div>
-
-                {/* Phone + Verify */}
                 <div>
                   <label className="block text-sm font-semibold text-primary-900 mb-2">
                     Phone *
                   </label>
-                  <div className="flex gap-2">
-                    <Input
-                      required
-                      type="tel"
-                      value={formData.phone}
-                      disabled={otpVerified}
-                      onChange={(e) => {
-                        setFormData({ ...formData, phone: e.target.value });
-                        setOtpSent(false);
-                        setOtpVerified(false);
-                        setOtp("");
-                      }}
-                      placeholder="+91 98765 43210"
-                      className="flex-1"
-                    />
-                    {!otpVerified && (
-                      <Button
-                        type="button"
-                        variant="outline"
-                        onClick={handleSendOtp}
-                        disabled={otpStatus === "sending"}
-                        className="shrink-0 whitespace-nowrap px-4"
-                      >
-                        {otpStatus === "sending"
-                          ? "Sending..."
-                          : otpSent
-                          ? "Resend OTP"
-                          : "Verify"}
-                      </Button>
-                    )}
-                    {otpVerified && (
-                      <span className="flex items-center gap-1.5 text-primary-600 text-sm font-medium px-3 shrink-0">
-                        <ShieldCheck size={16} />
-                        Verified
-                      </span>
-                    )}
-                  </div>
-
-                  {otpSent && !otpVerified && (
-                    <div className="mt-3 flex gap-2">
-                      <Input
-                        value={otp}
-                        onChange={(e) => setOtp(e.target.value)}
-                        placeholder="Enter OTP"
-                        className="flex-1"
-                      />
-                      <Button
-                        type="button"
-                        onClick={handleVerifyOtp}
-                        disabled={otpStatus === "verifying"}
-                        className="shrink-0 px-4"
-                      >
-                        {otpStatus === "verifying" ? "Checking..." : "Submit OTP"}
-                      </Button>
-                    </div>
-                  )}
-
-                  {otpError && <p className="text-red-600 text-xs mt-2">{otpError}</p>}
+                  <Input
+                    required
+                    type="tel"
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    placeholder="+91 98765 43210"
+                  />
                 </div>
-
                 <div>
                   <label className="block text-sm font-semibold text-primary-900 mb-2">
                     Email *
