@@ -6,7 +6,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { bookSession } from "@/lib/api";
-import { Calendar, CheckCircle2, Clock, Video, MessageCircle } from "lucide-react";
+import { Calendar, CheckCircle2, Clock, Video, MessageCircle, ShieldCheck } from "lucide-react";
+
+const interestOptions = [
+  { value: "exploring", label: "Just exploring options" },
+  { value: "one_time", label: "Want a one-time consultation" },
+  { value: "immediate", label: "Ready to join immediately" },
+];
 
 export default function BookSessionPage() {
   const [formData, setFormData] = useState({
@@ -16,13 +22,56 @@ export default function BookSessionPage() {
     user_type: "student",
     preferred_date: "",
     preferred_time: "",
+    interest_level: "",
     message: "",
   });
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
 
+  // OTP verification state (UI only — backend team wires actual send/verify)
+  const [otp, setOtp] = useState("");
+  const [otpSent, setOtpSent] = useState(false);
+  const [otpVerified, setOtpVerified] = useState(false);
+  const [otpStatus, setOtpStatus] = useState<"idle" | "sending" | "verifying">("idle");
+  const [otpError, setOtpError] = useState("");
+
+  const handleSendOtp = async () => {
+    if (!formData.phone || formData.phone.length < 10) {
+      setOtpError("Enter a valid phone number first");
+      return;
+    }
+    setOtpStatus("sending");
+    setOtpError("");
+    // TODO (backend team): call OTP send API here
+    setTimeout(() => {
+      setOtpSent(true);
+      setOtpStatus("idle");
+    }, 800);
+  };
+
+  const handleVerifyOtp = async () => {
+    if (!otp || otp.length < 4) {
+      setOtpError("Enter the OTP you received");
+      return;
+    }
+    setOtpStatus("verifying");
+    setOtpError("");
+    // TODO (backend team): call OTP verify API here
+    setTimeout(() => {
+      setOtpVerified(true);
+      setOtpStatus("idle");
+    }, 800);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!otpVerified) {
+      setErrorMsg("Please verify your phone number before submitting.");
+      setStatus("error");
+      return;
+    }
+
     setStatus("loading");
     setErrorMsg("");
 
@@ -39,8 +88,12 @@ export default function BookSessionPage() {
         user_type: "student",
         preferred_date: "",
         preferred_time: "",
+        interest_level: "",
         message: "",
       });
+      setOtp("");
+      setOtpSent(false);
+      setOtpVerified(false);
     }
   };
 
@@ -145,30 +198,81 @@ export default function BookSessionPage() {
                   </span>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                  <div>
-                    <label className="block text-sm font-semibold text-primary-900 mb-2">
-                      Name *
-                    </label>
-                    <Input
-                      required
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      placeholder="Your full name"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-semibold text-primary-900 mb-2">
-                      Phone *
-                    </label>
+                <div>
+                  <label className="block text-sm font-semibold text-primary-900 mb-2">
+                    Name *
+                  </label>
+                  <Input
+                    required
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    placeholder="Your full name"
+                  />
+                </div>
+
+                {/* Phone + Verify */}
+                <div>
+                  <label className="block text-sm font-semibold text-primary-900 mb-2">
+                    Phone *
+                  </label>
+                  <div className="flex gap-2">
                     <Input
                       required
                       type="tel"
                       value={formData.phone}
-                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      disabled={otpVerified}
+                      onChange={(e) => {
+                        setFormData({ ...formData, phone: e.target.value });
+                        setOtpSent(false);
+                        setOtpVerified(false);
+                        setOtp("");
+                      }}
                       placeholder="+91 98765 43210"
+                      className="flex-1"
                     />
+                    {!otpVerified && (
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={handleSendOtp}
+                        disabled={otpStatus === "sending"}
+                        className="shrink-0 whitespace-nowrap px-4"
+                      >
+                        {otpStatus === "sending"
+                          ? "Sending..."
+                          : otpSent
+                          ? "Resend OTP"
+                          : "Verify"}
+                      </Button>
+                    )}
+                    {otpVerified && (
+                      <span className="flex items-center gap-1.5 text-primary-600 text-sm font-medium px-3 shrink-0">
+                        <ShieldCheck size={16} />
+                        Verified
+                      </span>
+                    )}
                   </div>
+
+                  {otpSent && !otpVerified && (
+                    <div className="mt-3 flex gap-2">
+                      <Input
+                        value={otp}
+                        onChange={(e) => setOtp(e.target.value)}
+                        placeholder="Enter OTP"
+                        className="flex-1"
+                      />
+                      <Button
+                        type="button"
+                        onClick={handleVerifyOtp}
+                        disabled={otpStatus === "verifying"}
+                        className="shrink-0 px-4"
+                      >
+                        {otpStatus === "verifying" ? "Checking..." : "Submit OTP"}
+                      </Button>
+                    </div>
+                  )}
+
+                  {otpError && <p className="text-red-600 text-xs mt-2">{otpError}</p>}
                 </div>
 
                 <div>
@@ -197,6 +301,38 @@ export default function BookSessionPage() {
                     <option value="parent">Parent</option>
                   </select>
                 </div>
+
+                {/* Interest-level question — shows for both Student and Parent */}
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  className="bg-gold-50 border border-gold-200 rounded-lg p-4"
+                >
+                  <label className="block text-sm font-semibold text-primary-900 mb-3">
+                    What best describes where you are right now? *
+                  </label>
+                  <div className="space-y-2">
+                    {interestOptions.map((opt) => (
+                      <label
+                        key={opt.value}
+                        className="flex items-center gap-2.5 text-sm text-gray-700 cursor-pointer"
+                      >
+                        <input
+                          type="radio"
+                          name="interest_level"
+                          required
+                          value={opt.value}
+                          checked={formData.interest_level === opt.value}
+                          onChange={(e) =>
+                            setFormData({ ...formData, interest_level: e.target.value })
+                          }
+                          className="w-4 h-4 accent-primary-500"
+                        />
+                        {opt.label}
+                      </label>
+                    ))}
+                  </div>
+                </motion.div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <div>
