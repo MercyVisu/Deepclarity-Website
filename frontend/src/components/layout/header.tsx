@@ -52,11 +52,6 @@ export function Header() {
 
           {/* CTA Button */}
           <div className="hidden lg:flex items-center space-x-3">
-            <Link href="/free-consultation">
-              <Button variant="outline" size="sm">
-                Free Consultation
-              </Button>
-            </Link>
             <Link href="/book-session">
               <Button size="sm">Premium Session</Button>
             </Link>
@@ -93,12 +88,7 @@ export function Header() {
                   {link.label}
                 </Link>
               ))}
-              <div className="pt-3 space-y-2">
-                <Link href="/free-consultation" className="block">
-                  <Button variant="outline" className="w-full">
-                    Free Consultation
-                  </Button>
-                </Link>
+              <div className="pt-3">
                 <Link href="/book-session" className="block">
                   <Button className="w-full">Premium Session</Button>
                 </Link>
