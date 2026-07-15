@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Award, BookOpen, Globe } from "lucide-react";
+import Image from "next/image";
 
 export function AboutFounder() {
   return (
@@ -16,13 +17,15 @@ export function AboutFounder() {
             transition={{ duration: 0.6 }}
             className="relative"
           >
-            <div className="aspect-[4/5] bg-gradient-to-br from-primary-100 to-accent-100 rounded-2xl flex items-center justify-center">
-              <div className="text-center p-8">
-                <div className="w-32 h-32 bg-primary-500 rounded-full mx-auto mb-4 flex items-center justify-center">
-                  <span className="text-4xl font-bold text-white">VS</span>
-                </div>
-                <h3 className="text-xl font-bold text-primary-900">V. Swaminathan</h3>
-                <p className="text-sm text-gray-600 mt-1"></p>
+            <div className="max-w-md mx-auto lg:max-w-none">
+              <div className="aspect-[3/4] relative rounded-2xl overflow-hidden shadow-lg">
+                <Image
+                  src="/founder.jpg"
+                  alt="V. Swaminathan — Founder, DeepClariti"
+                  fill
+                  className="object-cover object-top"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                />
               </div>
             </div>
           </motion.div>
