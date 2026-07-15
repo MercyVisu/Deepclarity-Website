@@ -58,7 +58,7 @@ export function Header() {
               </Button>
             </Link>
             <Link href="/book-session">
-              <Button size="sm">Book Session</Button>
+              <Button size="sm">Premium Session</Button>
             </Link>
           </div>
 
@@ -100,7 +100,7 @@ export function Header() {
                   </Button>
                 </Link>
                 <Link href="/book-session" className="block">
-                  <Button className="w-full">Book Session</Button>
+                  <Button className="w-full">Premium Session</Button>
                 </Link>
               </div>
             </div>
