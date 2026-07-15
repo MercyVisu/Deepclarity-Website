@@ -17,7 +17,7 @@ export function AboutFounder() {
             transition={{ duration: 0.6 }}
             className="relative"
           >
-            <div className="max-w-md mx-auto lg:max-w-none">
+            <div className="max-w-md mx-auto">
               <div className="aspect-[3/4] relative rounded-2xl overflow-hidden shadow-lg">
                 <Image
                   src="/founder.jpg"
